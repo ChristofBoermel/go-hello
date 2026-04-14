@@ -2,22 +2,25 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"bufio"
-	"strings"
 )
 
 func main() {
-		reader := bufio.NewReader(os.Stdin)
-
-		fmt.Println("What is your name? ")
-
-		name, _ := reader.ReadString('\n')
+	name := ""
+	age := 0
+	height := 0.0
 
 
-		name = strings.TrimSpace(name)
+	fmt.Print("What is your name? ")
 
-		fmt.Printf("Hello, %s\n", name)
-		greeting := fmt.Sprintf("Hello, %s", name)
-		//fmt.Print(greeting)
+	fmt.Scan(&name)
+
+	fmt.Print("What is your age? ")
+
+	fmt.Scan(&age)
+
+	fmt.Print("What is your height? ")
+
+	fmt.Scan(&height)
+
+	fmt.Printf("Hi %s, you are %d years old and %.2fm tall\n", name, age, height)
 }
