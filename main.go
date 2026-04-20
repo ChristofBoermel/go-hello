@@ -1,55 +1,73 @@
-package main
+package main 
 
-import "fmt"
+import (
+	"fmt"
+	"strings"	
+)
 
-func buildGreeting(name string, age int, height float64) string {
-	return fmt.Sprintf("Hi %s, you are %d years old and %.2fm tall", name, age, height)
+type Person struct {
+	Name string
+	Age int	
+	Height float64
+	Email string
+	Gender string
 }
 
-func greet(name string, age int, height float64) {
-	message := buildGreeting(name, age, height)
-	fmt.Println(message)
-}
-
-func validateAge(age int) error {
-	if age < 0 || age > 150 {
-		return fmt.Errorf("invalid age: %d, must be between 0 and 150", age)
+func validateEmail(email string) error {
+	if !strings.Contains(email, "@") {
+		return fmt.Errorf("invalid email address: %s", email)
 	}
 	return nil
 }
 
-func getUserInfo() (string, int, float64, error) {
-	name := ""
-	age := 0
-	height := 0.0
+func getUserInfo() (Person, error) {
+	p := Person{}
 
-	fmt.Print("What is your name? ")
-	_, err := fmt.Scan(&name)
+	fmt.Println("What is your name?: ")
+	_, err := fmt.Scan(&p.Name)
+	if err != nil	{
+			return Person{}, err
+	}
+
+	fmt.Println("How old are you?: ")
+	_, err = fmt.Scan(&p.Age)
 	if err != nil {
-		return "", 0, 0.0, err
+			return Person{}, err
 	}
 
-	fmt.Print("How old are you? ")
-	fmt.Scan(&age)
-	err = validateAge(age)	
-		if err != nil {
-		return "", 0, 0.0, err
+	fmt.Println("How tall are you?: ")
+	_, err = fmt.Scan(&p.Height)
+	if err != nil {
+			return Person{}, err
 	}
 
-	fmt.Print("How tall are you? ")
-	_, err = fmt.Scan(&height)
-		if err != nil {
-		return "", 0, 0.0, err
+	fmt.Println("What is your gender, m, f or nb?: ")
+	_, err = fmt.Scan(&p.Gender)
+	if err != nil {
+		return Person{}, err
 	}
 
-	return name, age, height, nil
+	fmt.Println("Type in your email!: ")
+	_, err = fmt.Scan(&p.Email)
+	if err != nil {
+		return Person{}, err
+	}
+	err = validateEmail(p.Email)
+	if err != nil {
+		return Person{}, err
+	}
+	return p, nil
+}
+
+func greet(p Person) {
+	fmt.Printf("Hi %s, you are %d years old and %.2fm tall, you are %s and your email is %s\n", p.Name, p.Age, p.Height, p.Gender, p.Email)
 }
 
 func main() {
-	name, age, height, err := getUserInfo()
-		if err != nil {
-			fmt.Println("Something went wrong: ", err)
+	p, err := getUserInfo()
+	if err != nil {
+		fmt.Println("Something went wrong:", err)
 		return
 	}
-	greet(name, age, height)
+	greet(p)
 }
