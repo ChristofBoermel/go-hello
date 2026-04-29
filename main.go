@@ -5,6 +5,42 @@ import (
 	"strings"	
 )
 
+type Greeter interface {
+	Greet()
+}
+
+type Robot struct {
+	Name string
+}
+
+type FormalPerson struct {
+	Name string
+}
+
+type CasualPerson struct {
+	Name string
+}
+
+func (f Robot) Greet() {
+	fmt.Printf("My name is Darth %s, I am your evil robot\n", f.Name)
+}
+
+func (f FormalPerson) Greet() {
+	fmt.Printf("Good day, I am %s.\n", f.Name)
+}
+
+func (c CasualPerson) Greet() {
+	fmt.Printf("Hey, I am %s.\n", c.Name)
+}
+
+func (p Person) Greet() {
+	fmt.Printf("Hi %s, you are %d years old and %.2fm tall, you are %s and your email is %s\n", p.Name, p.Age, p.Height, p.Gender, p.Email)
+}
+
+func introduce(g Greeter) {
+	g.Greet()
+}
+
 type Person struct {
 	Name string
 	Age int	
@@ -59,9 +95,6 @@ func getUserInfo() (Person, error) {
 	return p, nil
 }
 
-func greet(p Person) {
-	fmt.Printf("Hi %s, you are %d years old and %.2fm tall, you are %s and your email is %s\n", p.Name, p.Age, p.Height, p.Gender, p.Email)
-}
 
 func main() {
 	p, err := getUserInfo()
@@ -69,5 +102,16 @@ func main() {
 		fmt.Println("Something went wrong:", err)
 		return
 	}
-	greet(p)
+	
+	formal := FormalPerson{Name: "Charles"}
+	casual := CasualPerson{Name: "Chris"}
+	robot := Robot{Name: "Vader"}
+
+	introduce(formal)
+	introduce(casual)
+	introduce(robot)
+	introduce(p)
 }
+
+
+
